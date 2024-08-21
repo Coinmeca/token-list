@@ -119,4 +119,5 @@ jobs:
                         console.log('Pull request merged successfully.');
                       } else {
                         console.log('Pull request is not mergeable.');
+                        core.setFailed('Pull request is not mergeable.');
                       }
