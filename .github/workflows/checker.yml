@@ -23,59 +23,53 @@ jobs:
               run: echo "::set-output name=branch_name::$(git rev-parse --abbrev-ref pr_branch)"
 
             - name: Diff changes
-              run: git diff origin/main...${{ steps.pr_branch_name.outputs.branch_name }} -- > diff_output.txt
+              run: git diff --name-status origin/main...${{ steps.pr_branch_name.outputs.branch_name }} > diff_output.txt
 
-            - name: Identify deleted lines
-              run: grep '^-' diff_output.txt > deleted_lines.txt
-
-            - name: Check deleted lines attribution
-              run: |
-                  while IFS= read -r line; do
-                    # Get the original commit and author of the deleted line
-                    original_commit=$(git blame -L "/$line/" origin/main -- "$file" | cut -d ' ' -f 1 | head -n 1)
-                    original_author=$(git show -s --format='%an' $original_commit)
-                    
-                    # Get the current pull request author
-                    deleting_author=$(git show -s --format='%an' HEAD)
-                    
-                    # Compare authors
-                    if [ "$original_author" != "$deleting_author" ]; then
-                      echo "Deleted line '$line' was originally created by a different contributor"
-                      exit 1  # Fail the workflow
-                    fi
-                  done < deleted_lines.txt
-
-            - name: Validate folder structure and files
+            - name: Check for unauthorized chainId folder creation
               run: |
                   CHAIN_ID_REGEX='^[0-9]+$'
                   TOKEN_ADDRESS_REGEX='^0x[a-fA-F0-9]{40}$'
 
-                  # Get the pull request author
-                  PR_AUTHOR=$(jq -r '.pull_request.user.login' "$GITHUB_EVENT_PATH")
-
-                  # Validate each changed file
-                  for file in $(git diff --name-only origin/main...${{ steps.pr_branch_name.outputs.branch_name }}); do
+                  while IFS=$'\t' read -r status file; do
                     IFS='/' read -r -a path_parts <<< "$file"
 
-                    # Check the structure
-                    if [[ ${#path_parts[@]} -lt 2 ]]; then
-                      echo "Invalid path structure: $file"
+                    if [[ ${#path_parts[@]} -eq 1 ]]; then
+                      if [[ ${path_parts[0]} =~ $CHAIN_ID_REGEX ]]; then
+                        echo "Unauthorized creation of chainId folder: ${path_parts[0]}"
+                        exit 1
+                      fi
+                    fi
+
+                    if [[ ${#path_parts[@]} -eq 2 ]]; then
+                      if [[ ! ${path_parts[1]} =~ $TOKEN_ADDRESS_REGEX ]]; then
+                        echo "Invalid token address folder: ${path_parts[1]}"
+                        exit 1
+                      fi
+                    fi
+                  done < diff_output.txt
+
+            - name: Check for unauthorized file modifications
+              run: |
+                  while IFS=$'\t' read -r status file; do
+                    IFS='/' read -r -a path_parts <<< "$file"
+
+                    # Ensure only files inside token_address folders are modified
+                    if [[ ${#path_parts[@]} -eq 2 && $status != "A" ]]; then
+                      echo "Files can only be modified inside token_address folders"
                       exit 1
                     fi
 
-                    # Validate chain ID folder
-                    if ! [[ ${path_parts[0]} =~ $CHAIN_ID_REGEX ]]; then
-                      echo "Invalid chain ID folder: ${path_parts[0]}"
-                      exit 1
+                    # Ensure only the creator of the folder can modify or add files to it
+                    if [[ ${#path_parts[@]} -ge 2 ]]; then
+                      folder_creator=$(git log --pretty=format:"%an" --reverse -- "${path_parts[0]}/${path_parts[1]}" | head -n 1)
+                      pr_author=$(jq -r '.pull_request.user.login' "$GITHUB_EVENT_PATH")
+                      if [[ "$folder_creator" != "$pr_author" ]]; then
+                        echo "Unauthorized modification by $pr_author in folder: ${path_parts[0]}/${path_parts[1]}"
+                        exit 1
+                      fi
                     fi
 
-                    # Validate token address folder
-                    if ! [[ ${path_parts[1]} =~ $TOKEN_ADDRESS_REGEX ]]; then
-                      echo "Invalid token address folder: ${path_parts[1]}"
-                      exit 1
-                    fi
-
-                    # Check required files
+                    # Ensure only valid files are added
                     if [[ ${#path_parts[@]} -eq 3 ]]; then
                       case "${path_parts[2]}" in
                         info.json)
@@ -84,8 +78,8 @@ jobs:
                             exit 1
                           fi
                           ;;
-                        logo.png|logo.jpg|logo.jpeg|logo.svg)
-                          if ! file "$file" | grep -qE 'image|SVG'; then
+                        logo.svg)
+                          if ! file "$file" | grep -q 'SVG'; then
                             echo "Invalid logo file: $file"
                             exit 1
                           fi
@@ -96,13 +90,17 @@ jobs:
                           ;;
                       esac
                     fi
+                  done < diff_output.txt
 
-                    # Check file history
-                    if git log --pretty=format:"%an" "$file" | grep -v "$PR_AUTHOR" > /dev/null; then
-                      echo "Unauthorized change by $PR_AUTHOR to file: $file"
+            - name: Ensure no files are added to the chainId folder path
+              run: |
+                  while IFS=$'\t' read -r status file; do
+                    IFS='/' read -r -a path_parts <<< "$file"
+                    if [[ ${#path_parts[@]} -eq 1 ]]; then
+                      echo "Files cannot be added directly to the chainId folder path"
                       exit 1
                     fi
-                  done
+                  done < diff_output.txt
 
             - name: Auto-merge PR
               if: success()
