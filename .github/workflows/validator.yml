@@ -4,13 +4,13 @@ on:
     pull_request:
         types: [opened, synchronize]
 
+permissions:
+    contents: read
+    pull-requests: write
+
 jobs:
     validate:
         runs-on: ubuntu-latest
-
-        permissions:
-            contents: write # Allows actions to write to repository contents
-            pull-requests: write # Allows actions to write to pull requests
 
         steps:
             - name: Checkout repository
