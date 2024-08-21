@@ -1,16 +1,18 @@
 {
     "id": 421614,
     "base": "evm",
-    "type": "testnet",
     "name": "Arbitrum Sepolia",
+    "logo": "https://coinmeca-web3.vercel.app/42161/logo.svg",
     "rpc": [
         "https://sepolia-rollup.arbitrum.io/rpc",
-        "https://arbitrum-sepolia.blockpi.network/v1/rpc/public"
+        "https://arbitrum-sepolia.blockpi.network/v1/rpc/public",
+        "https://endpoints.omniatech.io/v1/arbitrum/sepolia/public"
     ],
     "explorer": [
         "https://sepolia.arbiscan.io/"
     ],
     "nativeCurrency": {
+        "name": "Ethereum",
         "symbol": "ETH",
         "decimals": 18
     }
