@@ -2,7 +2,7 @@ name: Validate Contributions and Ownership
 
 on:
     pull_request:
-        types: [opened, synchronize]
+        types: [opened, reopened, synchronize]
 
 permissions:
     contents: read
