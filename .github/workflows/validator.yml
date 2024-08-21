@@ -118,6 +118,6 @@ jobs:
                         });
                         console.log('Pull request merged successfully.');
                       } else {
-                        console.log('Pull request state: ', pullRequest.mergeable_state);
+                        console.log(`Pull Request State: ${pullRequest.mergeable_state}`);
                         core.setFailed('Pull request is not mergeable.');
                       }
