@@ -96,28 +96,3 @@ jobs:
                       exit 1
                     fi
                   done
-
-            - name: Auto-merge PR
-              if: success()
-              uses: actions/github-script@v6
-              with:
-                  github-token: ${{ secrets.GITHUB_TOKEN }}
-                  script: |
-                      const { data: pullRequest } = await github.rest.pulls.get({
-                        owner: context.repo.owner,
-                        repo: context.repo.repo,
-                        pull_number: context.issue.number
-                      });
-
-                      if (pullRequest.mergeable_state === 'clean') {
-                        await github.rest.pulls.merge({
-                          owner: context.repo.owner,
-                          repo: context.repo.repo,
-                          pull_number: context.issue.number,
-                          merge_method: 'squash'
-                        });
-                        console.log('Pull request merged successfully.');
-                      } else {
-                        console.log(`Pull Request State: ${pullRequest.mergeable_state}`);
-                        core.setFailed('Pull request is not mergeable.');
-                      }
