@@ -16,9 +16,9 @@
     "reserve": "0x888e45a52512E92563c1D818Ab79488a3F9de4e9",
     "vault": "0xbf6a90Fc525e5D2592948324438b079A55d4F9f4",
     "farm": {
-        "base": "0x678023F8D81a99715e218bA559a9015047B87768",
-        "main": "0x6510b8f99C8855Dbb05016a9f828861b3f3Dcb6A"
+        "base": "0xd3843d10e4b3c6e95f16f84593304f0f8b65608c",
+        "main": "0x1aa4f5030f73b8fb1330cc1f13f64317a9fa8fe2"
     },
     "exchange": "0xDfA350FcF7939C74aE50772256712fcc01dd6275",
-    "query": "0x42ea94c189BEed06c97f6631544c87737bb0Bd9a"
+    "query": "0xeefd8181f7d4ba3bbacede89a67c5430f73b3512"
 }
