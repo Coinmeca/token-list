@@ -2,7 +2,7 @@
     "credit": "0xD098dbd046f5eC2F454a40dcf7110a295355302e",
     "app": "0x705BB81d725760022c0019aA810869c490761a48",
     "tokens": {
-        "meca": "0xB60413F1f056840528b729000d8D94dFCb5359f1",
+        "meca": "0xb60413f1f056840528b729000d8d94dfcb5359f1",
         "mocks": {
             "dai": "0x72f3a98170e961e310946BEA60B0B23Ad912d969",
             "usdt": "0xd42b5E48D0e2C265A87adF7E08d2fCd9c62ff17B",
