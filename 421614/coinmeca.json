@@ -14,7 +14,7 @@
         }
     },
     "reserve": "0xfc9767708d02a75c557fac28efff73ae2b92c73c",
-    "vault": "0xab12dcd75d1dad148a13f014b255c5d1b1298ffb",
+    "vault": "0x38037ce647845fb95b7971057fe5c98a1aa273e4",
     "farm": {
         "base": "0x031cf404029d0e05c38a96bb4ff1fb0e94c2b8a1",
         "main": "0x8b156545772fbc47a09835c6810b68ceb2b0d385"
