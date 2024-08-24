@@ -1,8 +1,8 @@
 ﻿{
-    "credit": "0xD098dbd046f5eC2F454a40dcf7110a295355302e",
-    "app": "0x705BB81d725760022c0019aA810869c490761a48",
+    "credit": "0x7f5df01835740c77dae10a0d78a6cc75ea7dab14",
+    "app": "0x428d55b528a2d39c143ec51055e7e0531d02aa81",
     "tokens": {
-        "meca": "0xb60413f1f056840528b729000d8d94dfcb5359f1",
+        "meca": "0x2de7e5f13dff305c88cba596c75bc4ed932b9fff",
         "mocks": {
             "dai": "0x72f3a98170e961e310946BEA60B0B23Ad912d969",
             "usdt": "0xd42b5E48D0e2C265A87adF7E08d2fCd9c62ff17B",
@@ -13,12 +13,12 @@
             "wsol": "0xd06bd4588621FFa20B6a21E652B912E227f0b131"
         }
     },
-    "reserve": "0x888e45a52512E92563c1D818Ab79488a3F9de4e9",
-    "vault": "0xbf6a90Fc525e5D2592948324438b079A55d4F9f4",
+    "reserve": "0xfc9767708d02a75c557fac28efff73ae2b92c73c",
+    "vault": "0xab12dcd75d1dad148a13f014b255c5d1b1298ffb",
     "farm": {
-        "base": "0xd3843d10e4b3c6e95f16f84593304f0f8b65608c",
-        "main": "0x1aa4f5030f73b8fb1330cc1f13f64317a9fa8fe2"
+        "base": "0x031cf404029d0e05c38a96bb4ff1fb0e94c2b8a1",
+        "main": "0x8b156545772fbc47a09835c6810b68ceb2b0d385"
     },
-    "exchange": "0xDfA350FcF7939C74aE50772256712fcc01dd6275",
+    "exchange": "0xc3179008d8230e042c3414356dcb1b8772c2f7d9",
     "query": "0xeefd8181f7d4ba3bbacede89a67c5430f73b3512"
 }
